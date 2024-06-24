@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  background-color: #f2f2f2;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.loginside{
+  background-color: rgb(68, 68, 68);
+  border: 1px solid white;
+  height: 100rem;
+}
+.loginas img {
+  color: white;
+  height: 45px;
+width: 45px;
+
+ 
+}
+.loginas{
+padding: 10px;
+height: 50px;margin-bottom: 20px;
+display: flex;
+justify-content: space-evenly;
+/* background-color: blueviolet; */
+width: 400px;
+
+ }
+ .loginas a{
+/* background-color: aqua; */
+cursor: pointer;  
+
+ }
+ .logininput  input[type="password"]::-ms-reveal {
+  display: none;
+}
+ 
+.logininput{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+  
+  /* Hide the eye icon in WebKit browsers (Chrome, Safari) */
+  .logininput input[type="password"]::-webkit-textfield-decoration-container {
+    display: none;
+  }
+  .loginalign {
+/* background-color: #f5f5f56f; */
+    display: flex;
+    flex-direction: column;
+  }
+
+.termncond{
+  font-weight: 600;
+}
+.termncond a{
+  margin-left: 5px;
+}
+.donthaveacc a{
+text-decoration: underline;
+margin-left: 5px;
+color: rgba(141, 86, 192, 0.92);
+}

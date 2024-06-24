@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "country-list": "^2.3.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
