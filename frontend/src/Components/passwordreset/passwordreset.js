@@ -4,11 +4,12 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useSignup } from '../../Hooks/Usesignup'
+import { useLogin } from '../../Hooks/Uselogin';
 
 
 
 const SetPassword=forwardRef(({ formData, setFormData ,setLoading}, ref)=> {
-  const {passwordsignup,error,isLoading} =useSignup()
+  const {passwordresetvr,error,isLoading} =useLogin()
   const [password, setPassword] = useState(parseInt(formData.password) || '');
   const [confirmPassword, setConfirmPassword] = useState(parseInt(formData.confirmPassword) || '');
   const [showPassword, setShowPassword] = useState(false);
@@ -34,21 +35,13 @@ const[allerror,setallerror]=useState(false)
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-    alert('Passwords match');
-    // Add your form submission logic here
-  };
+
 
   const isPasswordValid = (password) => {
     const hasNumber = /\d/.test(password);
     const hasUppercase = /[A-Z]/.test(password);
     const hasLowercase = /[a-z]/.test(password);
-    const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasSymbol = /[!@#$%^&*(),.?":{}|<>_-]/.test(password);
     const hasMinLength = password.length >= 8;
     return { hasNumber, hasUppercase ,hasLowercase ,hasSymbol, hasMinLength };
   };
@@ -87,7 +80,7 @@ const[allerror,setallerror]=useState(false)
     // Add validation logic here
     
    try {
-     await passwordsignup(password,confirmPassword)
+     await passwordresetvr(password,confirmPassword)
      setLoading(isLoading)
      setFormData(prev => ({ ...prev, password ,confirmPassword }));
      return true;
@@ -100,16 +93,16 @@ const[allerror,setallerror]=useState(false)
 
   })
   return (
-    <Box sx={{width:'50%'}}>
+    <Box sx={{mb:3}}>
       <Typography variant="h3" sx={{ fontSize: '50px', fontWeight: '700' }} gutterBottom>
-        Set password
+        Reset password
       </Typography>
 
-      <form onSubmit={handleSubmit}>
+  
         
         <TextField
           fullWidth
-          sx={{bgcolor: 'white',
+          sx={{bgcolor: 'white', mt:3,
             borderRadius: (allerror||passworderror) ? '10px 10px 0 0' : '10px', '& .MuiOutlinedInput-root': {
                 borderRadius: (allerror||passworderror) ? '10px 10px 0 0' : '10px',height:'60px',
                 '& fieldset': {
@@ -154,7 +147,7 @@ const[allerror,setallerror]=useState(false)
                     }} variant="filled" severity="error" >
                         {error}
                     </Alert>}
-                    <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mt={1} px={2}>
           <FormHelperText sx={{display:'flex'}}  error={!passwordValidation.hasNumber} >
             <CheckCircleIcon color={passwordValidation.hasNumber ? 'success' : 'error'} fontSize="small" /> <p style={{marginTop:'1px' ,marginLeft:'3px'}}>a number</p>
           </FormHelperText>
@@ -175,7 +168,7 @@ const[allerror,setallerror]=useState(false)
         <TextField
           fullWidth
           variant="outlined"
-          sx={{bgcolor: 'white',
+          sx={{bgcolor: 'white', mt:2,
             borderRadius: (allerror||confirmpassworderror) ? '10px 10px 0 0' : '10px', '& .MuiOutlinedInput-root': {
                 borderRadius: (allerror||confirmpassworderror) ? '10px 10px 0 0' : '10px',height:'60px',
                 '& fieldset': {
@@ -222,7 +215,7 @@ const[allerror,setallerror]=useState(false)
                     </Alert>}
 
         
-      </form>
+
       </Box>
   )
 })

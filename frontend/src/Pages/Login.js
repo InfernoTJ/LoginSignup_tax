@@ -5,9 +5,10 @@ import Facebook from '../Images/Icons/facebook.png'
 import weebly from '../Images/Icons/weebly.png'
 import linkedin from '../Images/Icons/linkedin.png'
 import Instagram from '../Images/Icons/instagram.png'
-import { Loading } from '../Components/Loading'
-import { Link } from 'react-router-dom'
 
+import { Link } from 'react-router-dom'
+import './login.css'
+import '../Components/Loading.css'
 
 import { Alert, Box, Button, Checkbox, FormControlLabel, IconButton, InputAdornment, InputLabel, Select, MenuItem, OutlinedInput, TextField, Typography } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
@@ -85,30 +86,23 @@ function Login() {
 
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Box sx={{
-                width: "50%", height: "100vh", bgcolor: "dodgerblue", justifyContent: 'center', display: "flex", flexDirection: 'column',
-                alignItems: 'center',
-            }} >
-                <img src={logo} width='auto' height='70px' alt='logo' />
-                <Typography variant='h1' sx={{
-                    color: "white", fontSize: "50px",
-                    fontWeight: '700'
-
-                }}>Welcome Back</Typography>
-                <Typography variant='p' sx={{ color: "white", width: '500px', textAlign: 'center', fontSize: '20px', fontWeight: '500' }}>
+        <Box className='loginpage' >
+            <Box className='logininfo' >
+                <img src={logo} className='LOGO' width='auto' height='70px' alt='logo' />
+                <h1 className='wbtext'  >Welcome Back</h1>
+                <Typography variant='p' sx={{ color: "white", mx:8, textAlign: 'center', fontSize: '20px', fontWeight: '500' }}>
                     "Welcome to 'SNP Tax & Financials', where tax management meets simplicity. Our advanced software streamlines tax processes for individuals, businesses, and professionals, ensuring accuracy and efficiency. Experience a new era of financial ease with SNP Tax & Financials."</Typography>
-                <Typography variant='p' sx={{ color: "white", width: '500px', textAlign: 'center', fontSize: '20px', mb: '100px' }}>
+                <Typography variant='p' className='fontchange' >
                     Please Login to access your account</Typography>
                 <div className='loginas'>
-                    <Link target='blank' to="https://x.com/?lang=en"><img width='60px' height='60px' src={Tweeter} alt='logoss' /></Link>
-                    <Link target='blank' to="https://www.facebook.com"><img width='60px' height='60px' src={Facebook} alt='logoss' /></Link>
-                    <Link target='blank' to="https://www.weebly.com/in"><img width='40px' height='40px' src={weebly} alt='logoss' /></Link>
-                    <Link target='blank' to="https://www.linkedin.com/feed/"><img width='40px' height='40px' src={linkedin} alt='logoss' /></Link>
-                    <Link target='blank' to="https://www.instagram.com"><img width='40px' height='40px' src={Instagram} alt='logoss' /></Link>
+                    <Link target='blank' to="https://x.com/?lang=en"><img width='60px' className='sociallogos big' height='60px' src={Tweeter} alt='logoss' /></Link>
+                    <Link target='blank' to="https://www.facebook.com"><img width='60px' className='sociallogos big' height='60px' src={Facebook} alt='logoss' /></Link>
+                    <Link target='blank' to="https://www.weebly.com/in"><img width='40px' className='sociallogos' height='40px' src={weebly} alt='logoss' /></Link>
+                    <Link target='blank' to="https://www.linkedin.com/feed/"><img width='40px' className='sociallogos' height='40px' src={linkedin} alt='logoss' /></Link>
+                    <Link target='blank' to="https://www.instagram.com"><img width='40px' className='sociallogos' height='40px' src={Instagram} alt='logoss' /></Link>
                 </div>
             </Box>
-            <Box className='logininput' sx={{ width: "50%", height: "100vh", bgcolor: "#f2f2f2" }} >
+            <Box className='logininput'  >
                 <form onSubmit={handleSubmit} >
                     <Box className='loginalign'>
                         <Typography variant='h1' sx={{
@@ -222,7 +216,7 @@ function Login() {
                             }}
                         >
                             <MenuItem value={0} disabled>Select Time Interval</MenuItem>
-                            <MenuItem value={15}>15 Seconds</MenuItem>
+                            <MenuItem value={5}>5 Seconds</MenuItem>
                             <MenuItem value={'8h'}>8 Hours</MenuItem>
                             <MenuItem value={'10d'}>10 Days</MenuItem>
                             <MenuItem value={'30d'}>30 Days</MenuItem>
@@ -282,7 +276,7 @@ function Login() {
                         }}>Login</Button>
                         <p className='donthaveacc'>Don't have an account?<Link to='/signup'>Sign Up</Link></p>
                     </Box></form>
-                {isLoading && <Loading />}
+                {isLoading && <div className='loaderr'></div>}
             </Box>
 
         </Box>

@@ -1,0 +1,51 @@
+.loginbut {
+    position: absolute;
+    top: 40px;
+    right: 150px;
+    text-decoration: none;
+    padding: 15px;
+    background-color: white;
+    color: dodgerblue;
+    border: 2px solid dodgerblue;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: 300ms;
+}
+
+.loginbut:hover {
+
+
+    color: white;
+    background-color: dodgerblue;
+    border: 2px solid dodgerblue;
+}
+.logosigunup {
+    position: absolute;
+    top: 40px;
+    left: 100px;
+    height: 55px;
+}
+@media only screen and (max-width: 768px) {
+    .logosigunup{
+        top: 28px;
+        left: 50px;
+        height: 45px;
+
+    }
+    .loginbut {
+        top: 20px;
+        right: 65px;
+    }
+    .emailbox{
+    margin-top: 25vh; width: 96%; background-color:aliceblue ;
+    }
+
+
+
+}
+@media only screen and (max-width: 425px) {
+
+  
+    
+
+}

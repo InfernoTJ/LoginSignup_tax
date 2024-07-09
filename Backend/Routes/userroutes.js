@@ -7,37 +7,28 @@ const { loginuser,  signupEmail,
     acceptFirmInfo,
     acceptFirmSizeServices,
     acceptServicesProvided,
+    passwordreset,
     acceptRoleInFirm,
+    passresetotp,
+    passwordchange,
     acceptWebUrlCurrency,
     setPassword} = require('../Controller/usercontroller')
-const validateSession =require('../Middleware/Validatesession')
+const validateSession  =require('../Middleware/Validatesession')
+const passwordresetvalid  =require('../Middleware/Validatesession')
 //login
 router.post('/login', loginuser)
 
+router.post('/login/resetpassword',passwordresetvalid, passwordreset)
+
+router.post('/login/resetpassword/otp',passwordresetvalid, passresetotp)
+
+router.patch('/login/resetpassword/changep',passwordresetvalid, passwordchange)
 //sign up 
 
-// router.post('/signup', signupuser)
-
-// router.post('/signup/email',validateSession ,  mailsign)
-
-// router.post('/signup/verify-otp', otpsign)
-
-// router.post('/signup/details', yourinfosign)
-
-// router.post('/signup/firm-info', firminfosign)
-
-// router.post('/signup/firm-size-services', firmdetailsign)
-
-// router.post('/signup/services-provided', servicesign)
-
-// router.post('/signup/role', roleinsign)
-
-// router.post('/signup/web-url-currency', firmsettingsign)
-
-// router.post('/signup/set-password', passwordsign)
 
 
 router.post('/signup/email', signupEmail);
+
 
 router.post('/signup/verify-otp', validateSession, verifyOTP);
 
@@ -54,5 +45,7 @@ router.post('/signup/role', validateSession, acceptRoleInFirm);
 router.post('/signup/web-url-currency', validateSession, acceptWebUrlCurrency);
 
 router.post('/signup/set-password', validateSession, setPassword);
+
+// router.patch('/signup/')
 
 module.exports = router

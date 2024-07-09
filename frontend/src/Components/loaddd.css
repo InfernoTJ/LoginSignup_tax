@@ -1,8 +1,9 @@
-/* loaderr 2 CSS BELOW *//* HTML: <div class="loaderr"></div> */
-.loaderr {
+/* LOADER 2 CSS BELOW *//* HTML: <div class="loader"></div> */
+.loader {
     width: 50px;
     position: absolute;
     top:8%;
+    right: 50%;
     aspect-ratio: 1;
     border-radius: 50%;
     background: 
@@ -22,7 +23,7 @@
     width: 100px;
     height: 100px;
 }
-.loaderr{
+.loader{
     margin-top: 10%;
     width: 50px;
     height: 50px;

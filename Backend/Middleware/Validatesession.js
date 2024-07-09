@@ -3,4 +3,9 @@ const validateSession = (req, res, next) => {
     next();
 };
 
-module.exports = validateSession;
+const passwordresetvalid = (req, res, next) => {
+    req.session.resetPassword = req.session.resetPassword || {};
+    next();
+};
+
+module.exports = validateSession ,passwordresetvalid;

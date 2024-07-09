@@ -10,6 +10,7 @@ const BookSession =(({ formData, setFormData }, ref)=> {
       <h2>{formData.lastname}</h2>
       <h2>{formData.firmname}</h2>
       <h2>{formData.country}</h2>
+      <h2>{formData.state}</h2>
       <h2>{formData.value}</h2>
       <h2>{formData.selectedSource}</h2>
       <ul> {formData.firmservices.map((formData)=>(<li>{formData.firmservices}</li>))}</ul>
@@ -17,7 +18,7 @@ const BookSession =(({ formData, setFormData }, ref)=> {
       <h2>{formData.url}.taxdome.com</h2>
       <h2>{formData.currency}</h2>
       <h2>{formData.password}</h2>
-     
+
     </div>
   )
 })

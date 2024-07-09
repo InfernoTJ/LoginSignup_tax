@@ -4,6 +4,7 @@ import { Box, Button, styled, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Input as BaseInput } from '@mui/base/Input';
 import { useSignup } from '../../Hooks/Usesignup'
+import { useLogin } from '../../Hooks/Uselogin';
 
 
 
@@ -170,18 +171,18 @@ function OTP({ separator, length, value, onChange }) {
   const Otp= forwardRef(({ formData, setFormData ,setLoading}, ref)=> {
     
     const [otp, setOtp] =useState(formData.otp);
-    const {otpsignup ,emailsignup,error,isLoading} =useSignup()
+    const {otpresetvr ,emailresetvr,error,isLoading} =useLogin()
     const[check,setcheck]=useState(true)
 
     async function  resendotp(){
-      await emailsignup(formData.email,check)
+      await emailresetvr(formData.email)
   
     }
     useImperativeHandle(ref, () => async () => {
       // Add validation logic here
      
      try {
-       await otpsignup(otp)
+       await otpresetvr(otp)
        setLoading(isLoading)
        setFormData(prev => ({ ...prev, otp }));
        return true;

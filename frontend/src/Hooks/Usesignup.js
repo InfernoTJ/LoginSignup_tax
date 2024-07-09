@@ -8,7 +8,7 @@ export const useSignup = () => {
     const [isLoading, setIsLoading] = useState(null)
   const [zaerror ,setZaerror]=useState(false)
 
-    const emailsignup = async (email) => {
+    const emailsignup = async (email,checkbox) => {
 
         setIsLoading(true)
         setError(null)
@@ -18,7 +18,7 @@ export const useSignup = () => {
         const response = await fetch('/api/user/signup/email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
+            body: JSON.stringify({ email ,checkbox })
         })
         const json = await response.json()
         if (!response.ok) {
@@ -93,7 +93,7 @@ export const useSignup = () => {
         }
 
         if (response.ok) {
-            
+          
             setZaerror(true)
             toast.success(json.message)
             setIsLoading(false)
@@ -224,7 +224,7 @@ export const useSignup = () => {
         }
 
     }
-    const firmsettingsignup = async (weburl, currency) => {
+    const firmsettingsignup = async (weburl, currency ,url) => {
 
         setIsLoading(true)
         setError(null)
@@ -234,7 +234,7 @@ export const useSignup = () => {
         const response = await fetch('/api/user/signup/web-url-currency', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ weburl, currency })
+            body: JSON.stringify({ weburl, currency,url })
         })
         const json = await response.json()
         if (!response.ok) {
@@ -255,7 +255,7 @@ export const useSignup = () => {
         }
 
     }
-    const passwordsignup = async (usrpassword) => {
+    const passwordsignup = async (usrpassword,confirmPassword) => {
 
         setIsLoading(true)
         setError(null)
@@ -265,7 +265,7 @@ export const useSignup = () => {
         const response = await fetch('/api/user/signup/set-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ usrpassword})
+            body: JSON.stringify({ usrpassword,confirmPassword})
         })
         const json = await response.json()
         if (!response.ok) {
@@ -276,7 +276,7 @@ export const useSignup = () => {
             toast.error(json.error)
             throw new Error(json.error)
         }
-
+        
         if (response.ok) {
             
             setZaerror(true)

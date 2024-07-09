@@ -1,7 +1,8 @@
 import { Alert, Box, Checkbox, FormControl, FormControlLabel, TextField, Typography } from '@mui/material'
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
-import { useSignup } from '../../Hooks/Usesignup'
+
 import { Link } from 'react-router-dom'
+import { useLogin } from '../../Hooks/Uselogin'
 
 
 
@@ -13,11 +14,11 @@ const Email = forwardRef(({ formData, setFormData, setLoading }, ref) => {
   const [mailerror, setMailerror] = useState(false)
   const [checkboxerror, setCheckboxerror] = useState(false)
   const [allerror, setallerror] = useState(false)
-  const { emailsignup, zaerror, error, isLoading } = useSignup()
+  const { emailresetvr, error, isLoading } = useLogin()
   useImperativeHandle(ref, () => async () => {
 
     try {
-      await emailsignup(email, checkbox);
+      await emailresetvr(email);
       setFormData(prev => ({ ...prev, email }))
       setLoading(isLoading)
       return true
@@ -33,32 +34,21 @@ const Email = forwardRef(({ formData, setFormData, setLoading }, ref) => {
   setLoading(isLoading)
   useEffect(() => {
 
-    if (error === 'Enter the Required Fields') {
-      setallerror(true)
-    } else {
-      setallerror(false)
 
-    }
-
-
-    if (error === 'Enter an Email' || error === 'Not Valid Email' || error === 'Email already in use') {
+    if (error === 'Account not found') {
       setMailerror(true);
 
     }
     else {
       setMailerror(false);
     }
-    if (error === 'Check the checkbox') {
-      setCheckboxerror(true);
-    } else {
-      setCheckboxerror(false)
-    }
   }, [error]);
 
+
   return (
-    <Box className='emailbox'>
-      <Typography textAlign={'center'} sx={{ fontSize: '45px', fontWeight: '700' }} variant='h3'>Sign Up</Typography>
-      <Typography sx={{ textAlign:'center', fontSize: '17px' }} variant='h6'>Sign Up your firm and start upgrading your workflow.</Typography>
+    <Box sx={{ mt: '30%', width: '96%' }}>
+      <Typography textAlign={'center'} sx={{ fontSize: '45px', fontWeight: '700' }} variant='h3'>Reset Your Password</Typography>
+      <Typography sx={{ ml: '16%', fontSize: '17px' }} variant='h6'>To reset your password, Enter the email that you use to login.</Typography>
       <TextField
         disabled={isLoading}
         label="Email"
@@ -96,31 +86,6 @@ const Email = forwardRef(({ formData, setFormData, setLoading }, ref) => {
       }} variant="filled" severity="error" >
         {error}
       </Alert>}
-      <FormControlLabel sx={{ marginTop: '12px' }} disabled={isLoading} value={checkbox} control={<Checkbox checked={checkbox} onChange={(e) => { setCheckbox(e.target.checked) }} sx={{ color: (checkboxerror || allerror) ? '#FF4E4E' : '' }} />} label={
-        <span className='iageree'>
-          I Agree to
-          <Link to="/termsncond">
-            Terms and Conditions
-          </Link>
-        </span>
-      } />
-      {(checkboxerror || allerror) && <Alert sx={{
-        width: '96%',
-        p: '0', // Adjust padding to control the size
-        pl: '4%', height: '23px',
-        borderRadius: '10px',
-        bgcolor: '#FF4E4E ',
-        fontSize: '13px',
-        display: 'flex',
-        alignItems: 'center', // Center content vertically
-        '& .MuiAlert-icon': {
-          fontSize: '16px', // Adjust the size of the icon
-          mr: '8px', // Add margin to the right of the icon
-        },
-      }} variant="filled" severity="error" >
-        Check the Agree to terms and conditons
-      </Alert>}
-   
     </Box>
   )
 })

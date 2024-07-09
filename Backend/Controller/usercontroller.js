@@ -65,13 +65,105 @@ const loginuser = async (req, res) => {
         //create a tken
         const token = createToken(user._id, timeout)
 
-        // //  res.status(200).json({email,token})
-        setTimeout(async () => { res.status(200).json({ email, token }); }, 8000)
+         res.status(200).json({email,token})
+        // setTimeout(async () => { res.status(200).json({ email, token }); }, 8000)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
 
 
+}
+//first step password reset send otp
+const passwordreset =async (req,res)=>{
+
+    const{email}=req.body
+    
+    try {
+       
+        const user = await User.findOne({ email })
+  if (!user) {
+    throw new Error('Account not found')
+  }
+      
+
+       
+        const otp = generateOTP();
+        // const otp = 12345;
+
+        req.session.resetPassword = { email, otp };
+
+        await sendOTP(email, otp)
+       res.status(200).json({ message: 'OTP sent to email' }) 
+
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+//check otp 
+
+const passresetotp = (req, res) => {
+
+
+    const { otp } = req.body;
+    try {
+        if (!otp) {
+            throw new Error('Enter An OTP')
+        }
+       
+        if (parseInt(req.session.resetPassword.otp) === parseInt(otp)) {
+            delete req.session.resetPassword.otp;
+            res.status(200).json({ message: 'OTP verified' });
+        } else {
+            throw new Error('Invalid OTP')
+        }
+    
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+//change password
+const passwordchange =async (req,res)=>{
+
+    const{newpassword,confirmPassword}=req.body
+    
+    try {
+        if (!newpassword && !confirmPassword) {
+            throw new Error('Enter Both Passwords')
+        }else{
+            if (!newpassword ) {
+                throw new Error('Enter A Password')
+            }
+            if ( !confirmPassword) {
+                throw new Error('Enter Confirm Password')
+            }
+        }
+
+        if(!validator.isStrongPassword(newpassword))
+            {
+                throw new Error('Create a Strong Password')
+            }
+            if(newpassword != confirmPassword)
+                {
+                    throw new Error('Wrong Confirm Password')
+                }
+
+        const resetPassword = req.session.resetPassword;
+        const { email} = resetPassword;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const hashedPassword = await bcrypt.hash(newpassword, 10);
+      
+        user.usrpassword = hashedPassword;
+        await user.save()
+
+        res.json({ message: 'Password updated successfully'  });
+
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
 }
 
 
@@ -79,10 +171,20 @@ const loginuser = async (req, res) => {
 const signupEmail = async (req, res) => {
 
 
-    const { email } = req.body;
+    const { email, checkbox } = req.body;
     try {
-        if (!email) {
-            throw new Error('Enter an Email')
+
+
+        if (!email && !checkbox) {
+            throw new Error('Enter the Required Fields')
+        }
+        else {
+            if (!email) {
+                throw new Error('Enter an Email')
+            }
+            if (!checkbox) {
+                throw new Error('Check the checkbox')
+            }
         }
 
         if (!validator.isEmail(email)) {
@@ -94,11 +196,13 @@ const signupEmail = async (req, res) => {
         }
 
 
-        const otp = generateOTP();
+        // const otp = generateOTP();
+        const otp = 12345;
+
         req.session.signupData = { email, otp };
 
-        await sendOTP(email, otp);
-        res.status(200).json({ message: 'OTP sent to email' });
+        // await sendOTP(email, otp)
+       res.status(200).json({ message: 'OTP sent to email' }) 
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -122,6 +226,7 @@ const verifyOTP = (req, res) => {
         } else {
             throw new Error('Invalid OTP')
         }
+        res.status(200).json({ message: 'OTP verified' })
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -134,10 +239,24 @@ const acceptUserDetails = async (req, res) => {
 
     const { firstname, lastname, phoneno } = req.body;
     try {
-        if (!firstname || !lastname || !phoneno) {
+        if (!firstname && !lastname && !phoneno) {
             throw new Error('Fill All the Fields')
+        } else {
+            if (!firstname ) {
+                throw new Error('Enter First Name')
+            }
+            if (!lastname ) {
+                throw new Error('Enter Last Name ')
+            }
+            if ( !phoneno) {
+                throw new Error('Enter Phone Number')
+            }
         }
-
+        const isValid = phoneno.length > 10 
+        if(!isValid)
+            {
+                throw new Error('Enter a Valid Phone number')
+            }
         if (await User.findOne({ phoneno })) {
             throw new Error('Phone Number Already Exists')
         }
@@ -157,8 +276,18 @@ const acceptFirmInfo = async (req, res) => {
     const { firmname, country, state } = req.body;
 
     try {
-        if (!firmname || !country || !state) {
+        if (!firmname && !country && !state) {
             throw new Error('Fill All the Fields')
+        }else{
+            if (!firmname ) {
+                throw new Error('Enter Firm Name')
+            }
+            if ( !country ) {
+                throw new Error('Select Country')
+            }
+            if (!state) {
+                throw new Error('Select State')
+            }
         }
 
         if (await User.findOne({ firmname })) {
@@ -174,15 +303,24 @@ const acceptFirmInfo = async (req, res) => {
 
 //FIRM DETAILS
 const acceptFirmSizeServices = (req, res) => {
-    
+
 
     const { firmsize, referal } = req.body;
 
 
     try {
-        if (!firmsize || !referal) {
+        if (!firmsize && !referal) {
             throw new Error('Select all Fields')
         }
+        else{
+            if (!firmsize ) {
+                throw new Error('Select firm size')
+            }
+            if ( !referal) {
+                throw new Error('Select atleast one')
+            }
+        }
+
         parseInt(firmsize)
         req.session.signupData = { ...req.session.signupData, firmsize, referal };
         res.status(200).json({ message: 'Firm size and services accepted' });
@@ -195,7 +333,7 @@ const acceptFirmSizeServices = (req, res) => {
 
 //FIRM SERVICES 
 const acceptServicesProvided = (req, res) => {
-   
+
 
     const { firmservices } = req.body;
 
@@ -214,7 +352,7 @@ const acceptServicesProvided = (req, res) => {
 
 //YOUR ROLE IN FIRM
 const acceptRoleInFirm = (req, res) => {
-    
+
 
     const { roleinfirm } = req.body;
     try {
@@ -224,7 +362,7 @@ const acceptRoleInFirm = (req, res) => {
         req.session.signupData = { ...req.session.signupData, roleinfirm };
         res.status(200).json({ message: 'Role in firm accepted' });
     } catch (error) {
-        res.status(400).json({error:error.message})
+        res.status(400).json({ error: error.message })
     }
 };
 
@@ -232,22 +370,31 @@ const acceptRoleInFirm = (req, res) => {
 
 //FIRM SETTINGS
 const acceptWebUrlCurrency = async (req, res) => {
-    
 
-    const { weburl, currency } = req.body;
-  try {
-    if (!weburl || !currency) {
-        throw new Error('Enter All Fields')
+
+    const { weburl, currency,url } = req.body;
+    try {
+        if (!url && !currency) {
+            throw new Error('Enter All Fields')
+        }
+        else{
+            if (!url ) {
+              
+                throw new Error('Enter Web url' + url)
+            }
+            if (!currency) {
+                throw new Error('Select Currency')
+            }
+        }
+        if (await User.findOne({ weburl })) {
+            throw new Error('WebUrl Already exists choose a different one')
+        }
+
+        req.session.signupData = { ...req.session.signupData, weburl, currency };
+        res.status(200).json({ message: 'Web URL and currency accepted' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
-      if (await User.findOne({ weburl })) {
-          throw new Error('WebUrl Already exists choose a different one')
-      }
-  
-      req.session.signupData = { ...req.session.signupData, weburl, currency };
-      res.status(200).json({ message: 'Web URL and currency accepted' });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
 };
 
 
@@ -255,13 +402,29 @@ const acceptWebUrlCurrency = async (req, res) => {
 
 //SET FIRM PASSWORD
 const setPassword = async (req, res) => {
-  
 
-    const { usrpassword } = req.body;
+
+    const { usrpassword,confirmPassword } = req.body;
     try {
-        if (!usrpassword) {
-            throw new Error('Enter A Password')
+        if (!usrpassword && !confirmPassword) {
+            throw new Error('Enter Both Passwords')
+        }else{
+            if (!usrpassword ) {
+                throw new Error('Enter A Password')
+            }
+            if ( !confirmPassword) {
+                throw new Error('Enter Confirm Password')
+            }
         }
+
+        if(!validator.isStrongPassword(usrpassword))
+            {
+                throw new Error('Create a Strong Password')
+            }
+            if(usrpassword != confirmPassword)
+                {
+                    throw new Error('Wrong Confirm Password')
+                }
         const hashedPassword = await bcrypt.hash(usrpassword, 10);
 
         const signupData = req.session.signupData;
@@ -292,5 +455,8 @@ module.exports = {
     acceptServicesProvided,
     acceptRoleInFirm,
     acceptWebUrlCurrency,
-    setPassword
+    setPassword,
+    passresetotp,
+    passwordreset,
+    passwordchange
 }
